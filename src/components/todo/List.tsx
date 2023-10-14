@@ -2,9 +2,10 @@ import React, {useState} from "react";
 import {TodoItemData, TodoListData} from "../../models/todo";
 import styled from "styled-components";
 import TodoItem from "./Item";
+import Form, {FormData} from "./Form";
 
 const AppTitle = styled.h5<{ $bgColor?: string }>`
-  margin: 1rem 0;
+  margin: 0;
   padding: 0.2rem 0.5rem;
   color: white;
   background-color: ${props => props.$bgColor || "#000"};
@@ -44,21 +45,16 @@ export default function TodoList({
                                      onItemCompleted,
                                  }: TodoListProps) {
     const items = list?.items
-    const [text, setText] = useState<string>("");
     const [selectedItemIds, setSelectedItemIds] = useState<number[]>([])
-    const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setText(event.target.value);
-    };
 
-    const handleAddItem = (event: React.FormEvent) => {
-        event.preventDefault();
+
+    const handleAddItem = (form: FormData) => {
         const newItem: TodoItemData = {
             id: Date.now(),
-            text: text,
+            text: form?.text,
             done: false
         };
         onAddItem?.(newItem)
-        setText("")
     };
 
     const handleItemSelected = (itemId: number) => {
@@ -93,23 +89,7 @@ export default function TodoList({
                     </TodoListContainer>
                 </div>
             </div>
-            <form>
-                <div>
-                    <input
-                        type="text"
-                        onChange={handleTextChange}
-                        value={text}
-                    />
-                </div>
-                <div>
-                    <button
-                        onClick={handleAddItem}
-                        disabled={!text}
-                    >
-                        {"Add #" + (items.length + 1)}
-                    </button>
-                </div>
-            </form>
+            <Form title={"Create a new item"} onSubmit={handleAddItem}/>
         </div>}
     </>
 }

@@ -1,15 +1,36 @@
 import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {TodoItemData, TodoListData} from "./models/todo";
-import TodoList from "./components/Todo/List";
+import TodoList from "./components/todo/List";
 import {generateColor} from "./utils/color";
+import Form, {FormData} from "./components/todo/Form";
+import {AppButton} from "./components/common/button";
 
 const DB_KEY = "TodoApp.v1.1.Lists"
 
 
 const AppContainer = styled.div`
   margin: auto;
-  max-width: 400px;
+  max-width: 300px;
+  --font-color: #323232;
+  --font-color-sub: #666;
+  --bg-color: #fff;
+  --main-color: #323232;
+  --main-focus: #2d8cf0;
+  background: var(--bg-color);
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 10px 20px 20px;
+  gap: 10px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+`
+const Divider = styled.hr`
+  width: 100%;
+  border-bottom: 1px solid;
 `
 
 /**
@@ -19,7 +40,6 @@ const AppContainer = styled.div`
  * we could consider implementing "context and reducer" logic.
  */
 function TodoApp() {
-    const [name, setName] = useState<string>("");
     const [activeListId, setActiveListId] = useState<number | null>(null)
     const [lists, setLists] = useState<TodoListData[]>([])
 
@@ -41,22 +61,16 @@ function TodoApp() {
 
     // Handles collapsing
     const handleSelectList = (listId: number) => setActiveListId(listId === activeListId ? null : listId)
-    const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setName(event.target.value);
-    };
 
-    const handleAddList = (event: React.FormEvent) => {
-        event.preventDefault();
-
+    const handleAddList = (form: FormData) => {
         const newList: TodoListData = {
             id: Date.now(),
-            name: name,
+            name: form?.text,
             items: [],
             color: generateColor()
         };
 
         setLists((prevLists) => [...prevLists, newList]);
-        setName("");
     };
 
     const handleDeleteList = (listId: number) => {
@@ -97,8 +111,7 @@ function TodoApp() {
 
 
     return <AppContainer>
-        <h3>Todo APP </h3>
-        <button onClick={clearDB}>clear db</button>
+        <h3>BIMM Todo App</h3>
         {lists.map(list =>
             <TodoList
                 key={list?.id}
@@ -110,25 +123,10 @@ function TodoApp() {
                 onAddItem={handleAddItem}
                 onItemCompleted={handleItemCompleted}
             />)}
-
-        <h3>Create new list</h3>
-        <form>
-            <div>
-                <input
-                    type="text"
-                    onChange={handleTextChange}
-                    value={name}
-                />
-            </div>
-            <div>
-                <button
-                    onClick={handleAddList}
-                    disabled={!name}
-                >
-                    {"Add #" + (lists.length + 1)}
-                </button>
-            </div>
-        </form>
+        <Divider/>
+        <Form title={"Create a new list"} onSubmit={handleAddList}/>
+        <Divider/>
+        <AppButton onClick={clearDB}>Clear All / Start Again</AppButton>
     </AppContainer>
 }
 
