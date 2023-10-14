@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {TodoItemData, TodoListData} from "./models/todo";
 import TodoList from "./components/todo/List";
-import {generateColor} from "./utils/color";
+import {randomMaterialColor} from "./utils/color";
 import Form, {FormData} from "./components/todo/Form";
-import {AppButton} from "./components/common/button";
+import {AppButton, Divider} from "./components/common/misc";
 
 const DB_KEY = "TodoApp.v1.1.Lists"
 
@@ -27,10 +27,6 @@ const AppContainer = styled.div`
   padding: 10px 20px 20px;
   gap: 10px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont;
-`
-const Divider = styled.hr`
-  width: 100%;
-  border-bottom: 1px solid;
 `
 
 /**
@@ -67,7 +63,7 @@ function TodoApp() {
             id: Date.now(),
             name: form?.text,
             items: [],
-            color: generateColor()
+            color: randomMaterialColor()
         };
 
         setLists((prevLists) => [...prevLists, newList]);
@@ -123,10 +119,15 @@ function TodoApp() {
                 onAddItem={handleAddItem}
                 onItemCompleted={handleItemCompleted}
             />)}
-        <Divider/>
-        <Form title={"Create a new list"} onSubmit={handleAddList}/>
-        <Divider/>
-        <AppButton onClick={clearDB}>Clear All / Start Again</AppButton>
+
+        {lists?.length > 0 && <Divider/>}
+        {!activeListId && <>
+            <Form title={"Create a new list"} onSubmit={handleAddList}/>
+        </>}
+        {lists?.length > 0 && <>
+            <Divider/>
+            <AppButton onClick={clearDB}>Clear All / Start Again</AppButton>
+        </>}
     </AppContainer>
 }
 

@@ -8,13 +8,20 @@ export const AppButton = styled.button`
   padding: .5rem .5rem;
   transition: all 0.3s;
   font-weight: bold;
+
   &:hover {
-    border: 2px solid var(--main-focus);
-    color: var(--main-focus);
+    border: 2px solid black;
+    color: white;
+    background-color: black;
   }
 
   &:disabled {
     color: #666;
+    background-color: white;
     border: 2px solid #666;
   }
+`
+export const Divider = styled.hr`
+  width: 100%;
+  border-bottom: 1px solid;
 `

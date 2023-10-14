@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import {AppButton} from "../common/button";
+import {AppButton} from "../common/misc";
 
 export interface FormData {
     text: string

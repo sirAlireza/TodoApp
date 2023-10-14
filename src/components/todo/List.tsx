@@ -3,16 +3,26 @@ import {TodoItemData, TodoListData} from "../../models/todo";
 import styled from "styled-components";
 import TodoItem from "./Item";
 import Form, {FormData} from "./Form";
+import {AppButton, Divider} from "../common/misc";
 
 const AppTitle = styled.h5<{ $bgColor?: string }>`
   margin: 0;
   padding: 0.2rem 0.5rem;
-  color: white;
+  color: black;
   background-color: ${props => props.$bgColor || "#000"};
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-radius: 20px;
+  border-radius: 5px;
+  border: 2px solid black;
+
+  & p {
+    overflow: hidden;
+    font-weight: Bold;
+    background-color: white;
+    border-radius: 5px;
+    padding: .2rem .5rem;
+  }
 `;
 
 
@@ -69,14 +79,15 @@ export default function TodoList({
 
     return <>
         <AppTitle onClick={() => onSelectList(list?.id)} $bgColor={list?.color}>
-            <p>LIST: {list?.name}</p>
-            <DeleteButton onClick={handleDeleteList}>x</DeleteButton>
+            <p>{list?.name}</p>
+            <AppButton onClick={handleDeleteList}>x</AppButton>
         </AppTitle>
         {active && <div>
             <div>
                 <div>
                     <TodoListContainer>
-                        <button onClick={handleDeleteSelectedItems}>Delete Selected Items</button>
+                        {selectedItemIds.length > 0 &&
+                            <button onClick={handleDeleteSelectedItems}>Delete Selected Items</button>}
                         {items.map((item) => (
                             <TodoItem
                                 key={item?.id}
@@ -89,7 +100,8 @@ export default function TodoList({
                     </TodoListContainer>
                 </div>
             </div>
-            <Form title={"Create a new item"} onSubmit={handleAddItem}/>
+            <Form title={"Add a item to the list"} onSubmit={handleAddItem}/>
         </div>}
+        {active && <Divider/>}
     </>
 }
