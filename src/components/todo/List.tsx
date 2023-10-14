@@ -111,7 +111,7 @@ export default function TodoList({
                 ))}
                 {items?.length === 0 &&
                     <NoItemMessageContainer>
-                        <span>There is not task inside this list!</span>
+                        <span>There is no task inside this list!</span>
                     </NoItemMessageContainer>
                 }
             </TodoItemsContainer>
