@@ -12,7 +12,7 @@ const initialForm = {
 
 const FormContainer = styled.div`
   border: 2px solid;
-  padding: .3rem;
+  padding: .3rem .8rem;
   border-radius: 8px;
 `
 const FormInputContainer = styled.div`

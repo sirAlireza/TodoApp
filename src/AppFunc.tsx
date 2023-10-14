@@ -6,12 +6,11 @@ import {randomMaterialColor} from "./utils/color";
 import Form, {FormData} from "./components/todo/Form";
 import {AppButton, Divider} from "./components/common/misc";
 
-const DB_KEY = "TodoApp.v1.1.Lists"
-
+const DB_KEY = "Lists"
 
 const AppContainer = styled.div`
   margin: auto;
-  max-width: 300px;
+  max-width: 400px;
   --font-color: #323232;
   --font-color-sub: #666;
   --bg-color: #fff;
@@ -35,13 +34,15 @@ const AppContainer = styled.div`
  * However, if the children require frequent interaction with props,
  * we could consider implementing "context and reducer" logic.
  */
+
+
 function TodoApp() {
     const [activeListId, setActiveListId] = useState<number | null>(null)
     const [lists, setLists] = useState<TodoListData[]>([])
 
     useEffect(() => {
         // Get From DB
-        if (lists.length === 0) setLists(JSON.parse(localStorage.getItem(DB_KEY) || "[]"))
+        if (lists.length === 0) setLists(JSON.parse(localStorage.getItem(DB_KEY) || initialLists))
     }, []);
 
     useEffect(() => {
@@ -49,10 +50,10 @@ function TodoApp() {
         if (lists.length !== 0) localStorage.setItem(DB_KEY, JSON.stringify(lists));
     }, [lists]);
 
-
     const clearDB = () => {
         localStorage.removeItem(DB_KEY);
         setLists([])
+        setActiveListId(null)
     }
 
     // Handles collapsing
@@ -71,8 +72,8 @@ function TodoApp() {
 
     const handleDeleteList = (listId: number) => {
         setLists(prevLists => prevLists?.filter(list => list?.id !== listId));
+        if (listId === activeListId) setActiveListId(null)
     };
-
     const handleItemCompleted = (itemId: number) => {
         setLists(prevLists => prevLists?.map(list => {
             if (list?.id === activeListId) return {
@@ -105,7 +106,6 @@ function TodoApp() {
         }));
     };
 
-
     return <AppContainer>
         <h3>BIMM Todo App</h3>
         {lists.map(list =>
@@ -120,16 +120,43 @@ function TodoApp() {
                 onItemCompleted={handleItemCompleted}
             />)}
 
-        {lists?.length > 0 && <Divider/>}
-        {!activeListId && <>
+        {(!activeListId || lists?.length === 0) && <>
+            {lists?.length > 0 && <Divider/>}
             <Form title={"Create a new list"} onSubmit={handleAddList}/>
         </>}
         {lists?.length > 0 && <>
-            <Divider/>
-            <AppButton onClick={clearDB}>Clear All / Start Again</AppButton>
+            {!activeListId && <Divider/>}
+            <AppButton $fontSize={"16px"} onClick={clearDB}>Clear All / Start Again</AppButton>
         </>}
     </AppContainer>
 }
 
 
+const initialLists = JSON.stringify([{
+    "id": 1697310687486,
+    "name": "Home",
+    "items": [{"id": 1697310768926, "text": "Buy some chicken", "done": true}, {
+        "id": 1697310785494,
+        "text": "Clean the kitchen",
+        "done": false
+    }],
+    "color": "#d500f9"
+}, {
+    "id": 1697310691082,
+    "name": "Personal",
+    "items": [{"id": 1697310805623, "text": "Renew gym subscription", "done": false}],
+    "color": "#eceff1"
+}, {
+    "id": 1697310694254,
+    "name": "University",
+    "items": [{"id": 1697310701392, "text": "Sutdy Math", "done": false}, {
+        "id": 1697310742887,
+        "text": "Do the programming project",
+        "done": true
+    }, {"id": 1697310756408, "text": "Send email to the professor", "done": false}],
+    "color": "#80cbc4"
+}])
+
 export default TodoApp;
+
+

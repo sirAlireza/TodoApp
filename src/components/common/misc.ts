@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const AppButton = styled.button`
+export const AppButton = styled.button<{ $fontSize?: string }>`
   height: 100%;
   background: var(--bg-color);
   border: 2px solid var(--main-color);
@@ -8,7 +8,7 @@ export const AppButton = styled.button`
   padding: .5rem .5rem;
   transition: all 0.3s;
   font-weight: bold;
-
+  font-size: ${props => props?.$fontSize || "12px"};
   &:hover {
     border: 2px solid black;
     color: white;
