@@ -3,60 +3,26 @@ import {TodoItemData, TodoListData} from "../../models/todo";
 import styled from "styled-components";
 import TodoItem from "./Item";
 
-const AppTitle = styled.h3`
+const AppTitle = styled.h5<{ $bgColor?: string }>`
   margin: 1rem 0;
-  color: #ff2968;
+  padding: 0.2rem 0.5rem;
+  color: white;
+  background-color: ${props => props.$bgColor || "#000"};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 20px;
 `;
 
 
 const TodoListContainer = styled.ul`
-  padding-left: 0;
 
-  .todoitem {
-    position: relative;
-    margin-bottom: 0.25rem;
-    padding: 0.5rem 2rem 0.5rem 0.5rem;
-    border-top: 1px solid #ccc;
-
-    &.done {
-      .form-check-label {
-        color: #999;
-        text-decoration: line-through;
-      }
-    }
-
-    &.highlight {
-      border-color: #ff2968;
-      background-color: #ff8fb0;
-
-      &:last-child {
-        border-color: #ff2968;
-      }
-    }
-
-    &:last-child {
-      border-bottom: 1px solid #ccc;
-    }
-
-    .btn-danger {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-    }
-
-    .form-check-label {
-      width: 100%;
-
-      .form-check-input {
-        margin-right: 1rem;
-      }
-    }
-  }
 `;
 
 const DeleteButton = styled.button`
-  background-color: red;
-  color: white;
+  padding: 0.3rem;
+  border-radius: 3px;
+  border: 0;
 `
 
 interface TodoListProps {
@@ -106,11 +72,10 @@ export default function TodoList({
     const handleDeleteSelectedItems = () => onDeleteItem?.(selectedItemIds)
 
     return <>
-        <span onClick={() => onSelectList(list?.id)}>
-            <AppTitle>LIST: {list?.name}
-                <button onClick={handleDeleteList}>x</button>
-            </AppTitle>
-        </span>
+        <AppTitle onClick={() => onSelectList(list?.id)} $bgColor={list?.color}>
+            <p>LIST: {list?.name}</p>
+            <DeleteButton onClick={handleDeleteList}>x</DeleteButton>
+        </AppTitle>
         {active && <div>
             <div>
                 <div>
@@ -132,14 +97,12 @@ export default function TodoList({
                 <div>
                     <input
                         type="text"
-                        className="form-control"
                         onChange={handleTextChange}
                         value={text}
                     />
                 </div>
                 <div>
                     <button
-                        className="btn btn-primary"
                         onClick={handleAddItem}
                         disabled={!text}
                     >

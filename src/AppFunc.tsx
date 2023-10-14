@@ -2,8 +2,15 @@ import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import {TodoItemData, TodoListData} from "./models/todo";
 import TodoList from "./components/Todo/List";
+import {generateColor} from "./utils/color";
 
 const DB_KEY = "TodoApp.v1.1.Lists"
+
+
+const AppContainer = styled.div`
+  margin: auto;
+  max-width: 400px;
+`
 
 /**
  * In this application, the logic isn't overly complex.
@@ -11,7 +18,6 @@ const DB_KEY = "TodoApp.v1.1.Lists"
  * However, if the children require frequent interaction with props,
  * we could consider implementing "context and reducer" logic.
  */
-
 function TodoApp() {
     const [name, setName] = useState<string>("");
     const [activeListId, setActiveListId] = useState<number | null>(null)
@@ -45,7 +51,8 @@ function TodoApp() {
         const newList: TodoListData = {
             id: Date.now(),
             name: name,
-            items: []
+            items: [],
+            color: generateColor()
         };
 
         setLists((prevLists) => [...prevLists, newList]);
@@ -89,7 +96,7 @@ function TodoApp() {
     };
 
 
-    return <>
+    return <AppContainer>
         <h3>Todo APP </h3>
         <button onClick={clearDB}>clear db</button>
         {lists.map(list =>
@@ -109,14 +116,12 @@ function TodoApp() {
             <div>
                 <input
                     type="text"
-                    className="form-control"
                     onChange={handleTextChange}
                     value={name}
                 />
             </div>
             <div>
                 <button
-                    className="btn btn-primary"
                     onClick={handleAddList}
                     disabled={!name}
                 >
@@ -124,7 +129,7 @@ function TodoApp() {
                 </button>
             </div>
         </form>
-    </>
+    </AppContainer>
 }
 
 

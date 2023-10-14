@@ -16,4 +16,5 @@ export interface TodoListData {
     id: number;
     name: string;
     items: TodoItemData[];
+    color: string
 }

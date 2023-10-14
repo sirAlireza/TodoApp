@@ -32,28 +32,24 @@ export default function TodoItem({
     const markCompleted = () => onItemCompleted(item?.id);
     const deleteItem = () => onItemDeleted([item?.id]);
 
-    const itemClass = "form-check todoitem " + (item?.done ? "done" : "undone");
 
     const handleItemSelected = () => onItemSelected?.(item?.id)
     return (
-        <li className={itemClass} ref={listItemRef}>
-            <label className="form-check-label">
+        <li ref={listItemRef}>
+            <label>
                 <input
                     type="checkbox"
-                    className="form-check-input"
                     onChange={handleItemSelected}
                 />{" "}
                 Complete?
                 <input
                     type="checkbox"
-                    className="form-check-input"
                     onChange={markCompleted}
                 />{" "}
                 {item?.text}
             </label>
             <button
                 type="button"
-                className="btn btn-danger btn-sm"
                 onClick={deleteItem}
             >
                 x
