@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {TodoItemData, TodoListData} from "../../models/todo";
+import {TodoListData} from "../../models/todo";
 import styled from "styled-components";
 import TodoItem from "./Item";
 import Form, {FormData} from "./Form";
@@ -56,7 +56,7 @@ interface TodoListProps {
     list: TodoListData,
     onSelectList: (listId: number) => void
     onDeleteList: (listId: number) => void
-    onAddItem: (item: TodoItemData) => void
+    onAddItem: (form: FormData) => void
     onItemCompleted: (itemId: number) => void
     onDeleteItem: (itemId: number[]) => void
 }
@@ -76,15 +76,6 @@ export default function TodoList({
         setSelectedItemIds([])
     }, [active])
 
-    const handleAddItem = (form: FormData) => {
-        const newItem: TodoItemData = {
-            id: Date.now(),
-            text: form?.text,
-            done: false
-        };
-        onAddItem?.(newItem)
-    };
-
     const handleItemSelected = (itemId: number) => {
         if (selectedItemIds.includes(itemId))
             setSelectedItemIds(prev => prev.filter(id => id !== itemId))
@@ -96,13 +87,13 @@ export default function TodoList({
         onDeleteItem?.(selectedItemIds)
         setSelectedItemIds([])
     }
+
     return <>
         <AppTitle $active={active} $bgColor={list?.color}>
             <p onClick={() => onSelectList(list?.id)}>
                 <span>{!active ? " + " : " - "}</span>
-                {list?.name} {list?.items?.length === 0 ? "(0)" : `(${list?.items?.filter(i => i?.done)?.length}/${list?.items?.length})`}
+                <span>{list?.name} {list?.items?.length === 0 ? "(0)" : `(${list?.items?.filter(i => i?.done)?.length}/${list?.items?.length})`}</span>
             </p>
-
             <AppButton $fontSize={"10px"} onClick={handleDeleteList}>❌</AppButton>
         </AppTitle>
         {active && <div>
@@ -124,7 +115,7 @@ export default function TodoList({
                     </NoItemMessageContainer>
                 }
             </TodoItemsContainer>
-            <Form title={"Add a item to the list"} onSubmit={handleAddItem}/>
+            <Form title={"Add a item to the list"} onSubmit={onAddItem}/>
         </div>}
         {active && <Divider/>}
     </>

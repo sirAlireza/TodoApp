@@ -34,15 +34,13 @@ const AppContainer = styled.div`
  * However, if the children require frequent interaction with props,
  * we could consider implementing "context and reducer" logic.
  */
-
-
-function TodoApp() {
+export default function TodoApp() {
     const [activeListId, setActiveListId] = useState<number | null>(null)
     const [lists, setLists] = useState<TodoListData[]>([])
 
     useEffect(() => {
         // Get From DB
-        if (lists.length === 0) setLists(JSON.parse(localStorage.getItem(DB_KEY) || initialLists))
+        if (lists.length === 0) setLists(JSON.parse(localStorage.getItem(DB_KEY) || firstLoadLists))
     }, []);
 
     useEffect(() => {
@@ -85,7 +83,12 @@ function TodoApp() {
     };
 
 
-    const handleAddItem = (newItem: TodoItemData) => {
+    const handleAddItem = (form: FormData) => {
+        const newItem: TodoItemData = {
+            id: Date.now(),
+            text: form?.text,
+            done: false
+        };
         setLists(prevLists => prevLists?.map(list => {
             if (list?.id === activeListId) return {
                 ...list,
@@ -132,7 +135,7 @@ function TodoApp() {
 }
 
 
-const initialLists = JSON.stringify([{
+const firstLoadLists = JSON.stringify([{
     "id": 1697310687486,
     "name": "Home",
     "items": [{"id": 1697310768926, "text": "Buy some chicken", "done": true}, {
@@ -149,7 +152,7 @@ const initialLists = JSON.stringify([{
 }, {
     "id": 1697310694254,
     "name": "University",
-    "items": [{"id": 1697310701392, "text": "Sutdy Math", "done": false}, {
+    "items": [{"id": 1697310701392, "text": "Study Math", "done": false}, {
         "id": 1697310742887,
         "text": "Do the programming project",
         "done": true
@@ -157,6 +160,5 @@ const initialLists = JSON.stringify([{
     "color": "#80cbc4"
 }])
 
-export default TodoApp;
 
 

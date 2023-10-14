@@ -1,15 +1,8 @@
-import React, {useEffect, useRef} from "react";
+import React from "react";
 import {TodoItemData} from "../../models/todo";
 import styled from "styled-components";
-import {AppButton, Divider} from "../common/misc";
+import {AppButton} from "../common/misc";
 
-
-interface TodoItemProps {
-    item: TodoItemData,
-    onItemSelected: (itemId: number) => void;
-    onItemCompleted: (itemId: number) => void;
-    onItemDeleted: (itemId: number[]) => void;
-}
 
 const ItemContainer = styled.div<{ $done?: boolean }>`
   display: flex;
@@ -24,7 +17,7 @@ const ItemContainer = styled.div<{ $done?: boolean }>`
   margin: .2rem 0;
   border-radius: 5px;
 `
-const ItemLeftSection = styled.div`
+const ItemTextSection = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -33,11 +26,18 @@ const ItemLeftSection = styled.div`
   word-break: break-all;
   gap: 1rem;
 `
-const ButtonsContainer = styled.div`
+const ItemButtonSection = styled.div`
   display: flex;
   flex-direction: row;
   gap: .1rem;
 `
+
+interface TodoItemProps {
+    item: TodoItemData,
+    onItemSelected: (itemId: number) => void;
+    onItemCompleted: (itemId: number) => void;
+    onItemDeleted: (itemId: number[]) => void;
+}
 export default function TodoItem({
                                      item,
                                      onItemCompleted,
@@ -46,23 +46,22 @@ export default function TodoItem({
                                  }: TodoItemProps) {
     const markCompleted = () => onItemCompleted(item?.id);
     const deleteItem = () => onItemDeleted([item?.id]);
-
-
     const handleItemSelected = () => onItemSelected?.(item?.id)
+
     return <div>
         <ItemContainer $done={item?.done}>
-            <ItemLeftSection>
+            <ItemTextSection>
                 <input
                     type="checkbox"
                     onChange={handleItemSelected}
                 />{" "}
                 <span style={{textDecoration: !item?.done ? "none" : "line-through"}}>{item?.text}</span>
-            </ItemLeftSection>
-            <ButtonsContainer>
+            </ItemTextSection>
+            <ItemButtonSection>
                 <AppButton $fontSize={"10px"} type="button"
                            onClick={markCompleted}>{!item?.done ? "✅" : "❎"}</AppButton>
                 <AppButton $fontSize={"10px"} type="button" onClick={deleteItem}>❌</AppButton>
-            </ButtonsContainer>
+            </ItemButtonSection>
         </ItemContainer>
     </div>
 

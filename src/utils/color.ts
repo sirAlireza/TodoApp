@@ -1,8 +1,8 @@
 export const randomMaterialColor = () => {
-    var index = Math.floor(Math.random() * COLORS.length);
-    return COLORS[index];
+    var index = Math.floor(Math.random() * MaterialColors.length);
+    return MaterialColors[index];
 };
-const COLORS = [
+const MaterialColors = [
     "#fde0dc",
     "#fce4ec",
     "#f3e5f5",
