@@ -2,13 +2,7 @@ import React, {useState} from "react";
 import styled from "styled-components";
 import {AppButton} from "../common/misc";
 
-export interface FormData {
-    text: string
-}
 
-const initialForm = {
-    text: ""
-}
 
 const FormContainer = styled.div`
   border: 2px solid;
@@ -46,6 +40,14 @@ const FormTitle = styled.h4`
   padding: 0;
 `
 
+
+export interface FormData {
+    text: string
+}
+
+const initialForm = {
+    text: ""
+}
 export default function Form({onSubmit, title}: { onSubmit: (form: FormData) => void, title: string }) {
     const [form, setForm] = useState<FormData>(initialForm);
 
