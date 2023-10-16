@@ -1,6 +1,7 @@
 # React ToDo App
 
 The React ToDo App is a simple yet efficient task management application built using React and Typescript. It allows users to create, edit, and delete tasks, keeping track of their to-do list easily. This README will guide you through the setup, usage, and features of the application.
+
 **DEMO**: https://codesandbox.io/s/react-class-conversion-assignment-forked-r7yqpq
 ## Features
 
